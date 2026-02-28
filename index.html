@@ -498,7 +498,7 @@
     <div class="container">
         <header>
             <h1>THỜI KHÓA BIỂU</h1>
-            <p class="subtitle">HỌC KỲ 1 - 2025 ▸ SYSTEM ONLINE</p>
+            <p class="subtitle">HỌC KỲ 2 - 2025</p>
         </header>
 
         <div class="timetable-wrapper">
@@ -507,12 +507,9 @@
     </div>
 
     <script>
-        // ==========================================
-        // DỮ LIỆU THỜI KHÓA BIỂU 
-        // ==========================================
-        
+
         const SCHEDULE_DATA = {
-            // Thông tin các môn học
+        
             subjects: {
                 'BAA0021': {
                     name: 'Thể dục 1',
@@ -558,57 +555,94 @@
                     name: 'Vật lý đại cương 1',
                     room: 'P.cs2:E107',
                     type: 'LT'
+                }, //ki 2
+                'BAA00103': {
+                    name: 'Chủ nghĩa xã hội khoa học',
+                    room: 'P.cs2:E106',
+                    type: 'LT'
+                },
+                'EDT10001': {
+                    name: 'Nhập môn Khoa học giáo dục',
+                    room: 'P.cs2:E208',
+                    type: 'LT'
+                },
+                'EDT10008': {
+                    name: 'Phương pháp lập trình hướng đối tượng 1',
+                    room: 'P.cs2:F206',
+                    type: 'LT'
+                },
+                'EDT10008_TH': {
+                    name: 'Phương pháp lập trình hướng đối tượng 1',
+                    room: 'P.cs2:NDH4.1',
+                    type: 'TH'
+                },
+                'MTH00022': {
+                    name: 'Vi tích phân 2',
+                    room: 'P.cs2:D212',
+                    type: 'LT'
+                },
+                'MTH00022_TH': {
+                    name: 'Vi tích phân 2',
+                    room: 'P.cs2:NDH4.4',
+                    type: 'TH'
+                },
+                'MTH00044': {
+                    name: 'Xác suất thống kê',
+                    room: 'P.cs2:E207',
+                    type: 'LT'
+                },
+                'MTH00044_TH': {
+                    name: 'Xác suất thống kê',
+                    room: 'P.cs2:NDH4.3',
+                    type: 'TH'
                 }
             },
 
   
             timetable: [
                 // Tiết 1
-                ['BAA0101:5', null, 'BAA0021:3', 'MTH0021_TH:2', null, 'MTH0035:4', null],
+                [null, null, null, null, null, 'MTH00022:3', null],
                 // Tiết 2  
                 [null, null, null, null, null, null, null],
                 // Tiết 3
-                [null, null, null, null, null, null, null],
+                [null, null, null, 'EDT10001:3', null, null, null],
                 // Tiết 4
                 [null, null, null, null, null, null, null],
                 // Tiết 5
                 [null, null, null, null, null, null, null],
                 // Tiết 6
-                ['EDT0001:3', null, 'MTH0021:4', null, 'MTH0035_TH:2', 'PHY0001:4', null],
+                ['EDT10008:3', null, 'MTH00022:4', 'MTH00044:4', 'EDT10008_TH:3', 'BAA00103:4', null],
                 // Tiết 7
                 [null, null, null, null, null, null, null],
                 // Tiết 8
                 [null, null, null, null, null, null, null],
                 // Tiết 9
-                [null, null, null, null, null, null, null],
+                [null, null, null, null, 'MTH00044_TH:2', null, null],
                 // Tiết 10
                 [null, null, null, null, null, null, null]
             ]
         };
 
-        // ==========================================
-        // RENDER THỜI KHÓA BIỂU TỰ ĐỘNG
-        // ==========================================
-        
+
         function renderTimetable() {
             const container = document.getElementById('timetable');
             const days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
             
-            // Header row
+        
             container.innerHTML = '<div class="header-cell"><span>Tiết</span></div>';
             days.forEach(day => {
                 container.innerHTML += `<div class="header-cell"><span>${day}</span></div>`;
             });
 
-            // Track merged cells
+            
             const skipCells = new Set();
 
-            // Data rows
+     
             for (let period = 0; period < 10; period++) {
-                // Time column
+           
                 container.innerHTML += `<div class="time-cell">${period + 1}</div>`;
 
-                // Day columns
+        
                 for (let day = 0; day < 7; day++) {
                     const cellKey = `${period}-${day}`;
                     
@@ -621,17 +655,17 @@
                     if (!cellData) {
                         container.innerHTML += '<div class="cell-empty"></div>';
                     } else {
-                        // Parse subject code and span
+                       
                         const [subjectCode, span = 1] = cellData.split(':');
                         const subject = SCHEDULE_DATA.subjects[subjectCode];
                         const spanCount = parseInt(span);
 
-                        // Mark cells to skip
+              
                         for (let i = 1; i < spanCount; i++) {
                             skipCells.add(`${period + i}-${day}`);
                         }
 
-                        // Create subject cell
+                
                         const cellHTML = `
                             <div class="subject-cell" style="grid-row: span ${spanCount}">
                                 <span class="subject-type type-${subject.type}">${subject.type}</span>
@@ -645,7 +679,7 @@
                 }
             }
 
-            // Add stagger animation
+     
             document.querySelectorAll('.subject-cell').forEach((cell, index) => {
                 cell.style.animation = `popIn 0.6s ease-out ${index * 0.05}s both`;
             });
@@ -728,13 +762,13 @@
         function drawParticles() {
             particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
             
-            // Update and draw particles
+        
             particles.forEach(particle => {
                 particle.update();
                 particle.draw();
             });
 
-            // Draw connections
+
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -796,7 +830,7 @@
             });
         });
 
-        // Resize handler
+       
         window.addEventListener('resize', () => {
             matrixCanvas.width = window.innerWidth;
             matrixCanvas.height = window.innerHeight;
